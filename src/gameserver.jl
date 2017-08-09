@@ -3,9 +3,9 @@
     title::String
     elapsed::Second
 """
-type ServerInfo end
+mutable struct ServerInfo end
 
-immutable GameServer
+struct GameServer
     info::ServerInfo
     accounts::Account
 end

@@ -1,32 +1,24 @@
-"""
-id::UInt32
-name::String
-"""
-abstract AccountInfo
-type DefaultAccountInfo <: AccountInfo end
-AccountInfo() = DefaultAccountInfo()
+abstract type AccountInfo end
+abstract type Brain end
 
-abstract Brain
-type DefaultBrain <: Brain end
-Brain() = DefaultBrain()
-
-immutable Account
+struct Account
+    uid::UInt32
+    desc::String
+    # 계정레벨, 경험치 등 게임별로 다른 정보
     info::AccountInfo
-    wallet::Dict{DataType, Currency}
-    inven_stack::Dict{DataType, StackItem}
-    inven_nonstack::Dict{DataType, Vector{NonStackItem}}
+    inven::Inventory
     brain::Brain
     function Account()
-        new(AccountInfo(), wallet(), inven_stack(), inven_nonstack(), Brain())
+        new(AccountInfo(), wallet(), Inventory(), Brain())
     end
 end
 
 # init default value
 wallet() = Dict(map(T->(T, T(0)), subtypes(Currency)))
+## StackItem id와 수량만 저장
+inven_stack() = Dict{UInt32, Int}()
 inven_nonstack() = Dict(map(T->(T, Vector{T}()), subtypes(NonStackItem)))
 
-## TODO: StackItem 저장구조 고민 필요
-inven_stack() = Dict(map(T->(T, Vector{T}()), subtypes(StackItem)))
 
 
 ##############################################################################

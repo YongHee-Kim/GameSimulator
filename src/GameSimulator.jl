@@ -1,8 +1,8 @@
-module GameSimulator
+module GameSimulators
 
 # 게임 시뮬레이터
-
 using Base.Dates
+import Base: +, -, *, isless, median
 
 export
     # types
@@ -15,9 +15,13 @@ export
     wallet,
     inven_stack,
     inven_nonstack,
-    has, add!, remove!
+    has, add!, remove!,
+
+    #
+    smartparse
 
 ### source files
+include("datahandler.jl")
 include("currency.jl")
 include("item.jl")
 include("account.jl")
