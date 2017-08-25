@@ -1,26 +1,3 @@
-abstract type AccountInfo end
-abstract type Brain end
-
-struct Account
-    uid::UInt32
-    desc::String
-    # 계정레벨, 경험치 등 게임별로 다른 정보
-    info::AccountInfo
-    inven::Inventory
-    brain::Brain
-    function Account()
-        new(AccountInfo(), wallet(), Inventory(), Brain())
-    end
-end
-
-# init default value
-wallet() = Dict(map(T->(T, T(0)), subtypes(Currency)))
-## StackItem id와 수량만 저장
-inven_stack() = Dict{UInt32, Int}()
-inven_nonstack() = Dict(map(T->(T, Vector{T}()), subtypes(NonStackItem)))
-
-
-
 ##############################################################################
 ##
 ## Currency, Item 추가 제거 return 타입은 Bool

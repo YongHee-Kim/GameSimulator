@@ -1,36 +1,47 @@
-module GameSimulators
-
-# 게임 시뮬레이터
-using Base.Dates
-import Base: +, -, *, isless, median
-
-export
-    # types
-    GameServer, ServerInfo,
-    Account, AccountInfo, Brain,
-    Currency,
-    Item, StackItem, NonStackItem,
-
-    # methods
-    wallet,
-    inven_stack,
-    inven_nonstack,
-    has, add!, remove!,
-
-    #
-    smartparse
-
-### source files
-include("datahandler.jl")
-include("currency.jl")
-include("item.jl")
-include("account.jl")
-    include("gameserver.jl")
-
-
 """
 GameSimulator 모듈 설명
 """
-GameSimulator
+module GameSimulator
+
+import Base: +, -, *, isless, median, zero
+
+using Base.Dates
+using DataFrames
+
+
+
+
+### source files
+include("types.jl")
+    # 분류가 명확하지 않은 함수들
+    include("account.jl")
+    include("etc.jl")
+
+# Base.Dates 모듈의 구조를 참조
+include("accessors.jl")
+include("query.jl")
+include("arithmetic.jl")
+# include("io.jl")
+
+include("datahandler.jl")
+
+
+
+
+
+
+export
+    # datahandler
+    smartparse, rowindex_cash,
+
+    # types
+    Asset, Item, StackItem, NonStackItem,
+           Currency,
+           Unit,
+    Account, AccountData, Brain,
+    Inventory, Storage,
+
+    # methods
+    has, add!, remove!
 
 end

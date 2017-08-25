@@ -1,0 +1,8 @@
+StringBool,StringFloat,StringInteger,Bool,Integer,Float,String,StringBoolNA,StringFloatNA,StringIntegerNA,BoolNA,IntegerNA,FloatNA,StringNA
+this,test,blah,TRUE,447898,1.5,test,TRUE,,blah,TRUE,447898,1.5,test
+TRUE,this,aaabb,TRUE,6487878,2.557,this,thisis,this,,FALSE,,2.557,
+test,0.05,5,FALSE,4412,546,apple,FALSE,,5,,4412,,apple
+FALSE,1.24,2,FALSE,1155,3.547,kiwi,FALSE,1.24,2,TRUE,1155,3.547,kiwi
+TRUE,5,4,TRUE,1,0.1185,hello,TRUE,5,,FALSE,1,0.1185,
+TRUE,8,5,FALSE,5,59775,nirvana,test,8,5,,,,nirvana
+FALSE,15,4,TRUE,155677,5,simple,TRUE,15,4,FALSE,155677,5,simple

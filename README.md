@@ -16,17 +16,17 @@
 ## 메뉴얼
 
 ### 데이터 구조
-모든 구조체는 자기 자신의 정보가 있고, (...Info)
+모든 구조체는 자기 자신의 정보가 있고
 그리고 하위 구조체를 담는 Storage가 있다. (스토리지는 각 타입별로 1개씩)
 ``` julia
-immutable GameServer
+struct GameServer
     info::ServerInfo
     accounts::Account
 end
 
-immutable Account
-    # 게임별로 AccountInfo, Brain의 하위 구조체 정의
-    info::AccountInfo
+struct Account
+    # 게임별로 AccountStat, Brain의 하위 구조체 정의
+    info::AccountStat
     brain::Brain # GamePlay에서 사용할 DecisionTree
 
     # 모든 게임 공통 구조 Currency와 Item은 게임별로 정의
@@ -37,10 +37,13 @@ end
 ```
 
 ``` julia
+# Item을 장착할 수 있는 타입입니다.
+abstract Character
+
 # Currency는 1개의 Integer 필드만 가지는 데이터입니다.
 abstract Currency
 
-#Currency를 제외한 모든 게임 재화는 Item으로 분류합니다
+#Currency Item으로 분류합니다
 abstract Item
 abstract StackItem <: Item
 abstract NonStackItem <: Item
@@ -48,3 +51,13 @@ abstract NonStackItem <: Item
 
 ### 게임플레이 정의
 :construction:
+
+
+## 모듈구조
+types.jl -> 구조체와 구조체 생성과 관련됨 함수
+io.jl -> 디스플레이 관련됨 함수들
+함수는...
+query.jl -> 정보, 쿼리 예를들어 가챠폰 뽑기에서 ID는 query에서 가져온다.
+gameplay\*.jl -> 콘텐츠 단위별로 구분하여 함수 정의 (UI버튼명을 써버릴까?)
+
+datahandler.jl -> 독립적
