@@ -1,3 +1,3 @@
-itemid(x::Item) = x.id
+itemid(x::Asset) = x.id
 
 value(x::StackItem) = x.value

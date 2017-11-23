@@ -7,14 +7,12 @@ import Base: +, -, *, isless, median, zero
 
 using Base.Dates
 using DataFrames
-
-
+using TextParse
 
 
 ### source files
 include("types.jl")
     # 분류가 명확하지 않은 함수들
-    include("account.jl")
     include("etc.jl")
 
 # Base.Dates 모듈의 구조를 참조
@@ -27,9 +25,6 @@ include("datahandler.jl")
 
 
 
-
-
-
 export
     # datahandler
     smartparse, rowindex_cash,
@@ -38,10 +33,11 @@ export
     Asset, Item, StackItem, NonStackItem,
            Currency,
            Unit,
-    Account, AccountData, Brain,
-    Inventory, Storage,
+    Account, AbstractStats, AbstractBrain,
+    AbstractInventory, AbstractStorage,
 
     # methods
-    has, add!, remove!
+    itemid, value,
+    add!, remove!, has
 
 end

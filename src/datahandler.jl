@@ -1,8 +1,9 @@
 """
     smartparse(v::AbstractVector; optimize_memory::Bool=false)
 
-적절한 type으로 parse해줌
-TODO: Bool변수 처리 필요
+적절한 type으로 parse해줌 'Pangya'에서만 임시로 사용
+csv 파일은 [CSV](https://github.com/JuliaData/CSV.jl), Excel파일은 ExcelReaders(https://github.com/davidanthoff/ExcelReaders.jl)에서
+type을 찾아주기 때문에 불필요한 기능... 추후 삭제 예정
 """
 function smartparse(v::AbstractVector; optimize_memory::Bool=false)
     v = smartparse.(v)
@@ -39,11 +40,15 @@ function _smartparse_optimize_memory(v::AbstractVector)
 end
 
 """
-    idcash(df::DataFrame, id_colname::Symbol)
-지정된 컬럼의 Data로 row를 cash로 생성
-itemid등 index를 캐시로 저장
+    rowindex_cash(df::DataFrame, key_cols)
+지정된 컬ata로 row를 cash로 생성
 """
-function rowindex_cash(df::DataFrame, id_colname::Symbol)
-    ref = df[id_colname]
+function rowindex_cash(df::DataFrame, col::Symbol)
+    ref = df[col]
     Dict(zip(ref, 1:size(ref,1)))
+end
+function rowindex_cash(df::DataFrame, key_cols::Vector{Symbol})
+    ref = convert(Array, df[:, key_cols])
+    key = broadcast(n->tuple(ref[n, :]...), 1:size(ref, 1))
+    Dict(zip(key, 1:size(ref, 1)))
 end

@@ -21,42 +21,57 @@ abstract type StackItem    <: Item end
 # isless{T<:Stackable}(a::T, b::T) = isless(a.value, b.value)
 abstract type NonStackItem <: Item end
 
-
 """
-    Inventory
+    AbstractInventory
 storage 여러개를 가지는 저장고
+'struct Inventory <: AbstractInventory' 선언 필요
 """
-abstract type Inventory end
+abstract type AbstractInventory end
 
 """
-    Storage
-각 Asset 타입별로 1개의 Storage를 가진다.
+    AbstractStorage
+개별 Asset 타입별로 1개의 Storage를 가진다.
+게임 Module에서 지정해야 함.
+
+TODO: `NonStackStorage{T} where T<:NonStackItem`로 정의하여
+      공통 구조로 만들자.
 """
-abstract type Storage end
-# TODO: Currency, StackItem..... 등 별로 Storage 공통 구조 정립 필요
+abstract type AbstractStorage end
+## Iteration ##
+Base.start(x::AbstractStorage) = start(x.data)
+Base.next(x::AbstractStorage) = next(x.data)
+Base.done(x::AbstractStorage) = done(x.data)
+Base.getindex(x::AbstractStorage, args...) = getindex(x.data, args...)
+Base.setindex!(x::AbstractStorage, args...) = setindex!(x.data, args...)
+Base.length(x::AbstractStorage) = length(x.data)
+Base.deleteat!(x::AbstractStorage, inds) = deleteat!(x.data, inds)
 
+"""
+    AbstractStats
 
-
-
-abstract type AccountData end
-abstract type Brain end
+"""
+abstract type AbstractStats end
+"""
+    AbstractBrain
+각종 기억이 필요한 사항을 저장한다.
+TODO 우선은 General Purpose가 아니라 상황에 따라
+"""
+abstract type AbstractBrain end
 
 struct Account
     uid::UInt32
     desc::String
-    brain::Brain
-    # 계정레벨, 경험치 등 게임별로 다른 정보
-    data::AccountData
-    inven::Inventory
+    brain::AbstractBrain
+    stats::AbstractStats
+    inven::AbstractInventory
+
     let uid = UInt32(0)
-        function Account(desc="none")
-            new(uid += 1, desc, Brain(), AccountData(), Inventory())
+        function Account(desc, brain, stats)
+            uid += 1
+            new(uid, desc, brain, stats, AbstractInventory(uid))
         end
     end
 end
-
-
-
 
 
 # TODO: GameServer 구조
@@ -71,3 +86,28 @@ end
 #     info::ServerData
 #     accounts::Account
 # end
+
+
+Base.isless(x::T, y::T2) where {T<:Item, T2<:Item} = isless(itemid(x), itemid(y))
+
+
+
+# Fallback -- append! 함수를 사용하기 위해 이렇게 정의하긴 했는데...
+Base.length(x::Asset) = 1
+Base.start(x::Asset) = false
+Base.next(x::Asset, state) = (x, true)
+Base.done(x::Asset, state) = state
+
+# isempty(x::Number) = false
+# in(x::Number, y::Number) = x == y
+#
+# size(x::Number) = ()
+# size(x::Number,d) = convert(Int,d)<1 ? throw(BoundsError()) : 1
+# indices(x::Number) = ()
+# indices(x::Number,d) = convert(Int,d)<1 ? throw(BoundsError()) : OneTo(1)
+# eltype(::Type{T}) where {T<:Number} = T
+# ndims(x::Number) = 0
+# ndims(::Type{<:Number}) = 0
+# length(x::Number) = 1
+# endof(x::Number) = 1
+# iteratorsize(::Type{<:Number}) = HasShape()

@@ -38,7 +38,7 @@ end
 
 ``` julia
 # Item을 장착할 수 있는 타입입니다.
-abstract Character
+abstract Unit
 
 # Currency는 1개의 Integer 필드만 가지는 데이터입니다.
 abstract Currency
