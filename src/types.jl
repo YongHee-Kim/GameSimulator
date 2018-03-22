@@ -15,11 +15,31 @@ abstract type Unit <: Asset end
 TODO: 소켓에 박는 `Rune`이나 `보석`은 어떤 타입으로?
 """
 abstract type Item         <: Asset end
-abstract type Currency     <: Asset end
+itemid(x::Asset) = x.id
+Base.isless(x::T, y::T2) where {T<:Item, T2<:Item} = isless(itemid(x), itemid(y))
+
+abstract type Currency     <: Item end
+Base.convert(::Type{T}, x::Real) where {T<:Currency} = T(x)
+zero(x::Currency) = oftype(x,0)
+zero(::Type{T}) where {T<:Currency} = convert(T,0)
+
+value(x::Currency) = x.value
+isless{T<:Currency}(a::T, b::T) = isless(a.value, b.value)
+median{T<:Currency}(v::AbstractArray{T}) = median(value.(x))
+Base.:(==)(x::T, y::T) where T <: Currency = value(x) == value(y)
+
 abstract type StackItem    <: Item end
-# TODO: sorting 위하여 서로 다른 ID의 아이템을 구분할 rule 정의 필요.
-# isless{T<:Stackable}(a::T, b::T) = isless(a.value, b.value)
+value(x::StackItem) = x.value
+
+isless(a::T, b::T) where {T<:StackItem} = isless(a.value, b.value)
+function Base.:(==)(x::T, y::T) where T <: StackItem
+    value(x) == value(y) && itemid(x) == itemid(y)
+end
+
 abstract type NonStackItem <: Item end
+
+
+
 
 """
     AbstractInventory
@@ -88,7 +108,6 @@ end
 # end
 
 
-Base.isless(x::T, y::T2) where {T<:Item, T2<:Item} = isless(itemid(x), itemid(y))
 
 
 
